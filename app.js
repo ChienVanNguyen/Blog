@@ -22,9 +22,13 @@ app.use("/post",(req,res)=>{
     res.render('post')
 })
 ;
+
+app.get('/posts/new', (req, res) => {
+    res.render('create')
+});
+
 app.use("/",(req,res)=>{
     //res.sendFile(path.resolve(__dirname,"page/index.html"));
-    res.render('index')
 });
 app.listen(3900, ()=> {
     console.log('App listening on port 3900')
