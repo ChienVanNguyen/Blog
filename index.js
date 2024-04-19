@@ -2,7 +2,6 @@ const express = require("express");
 require("ejs"); // Important
 const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
-
 const {
     addPost,
     getPost,
@@ -15,6 +14,7 @@ const app = express();
 // Set template engine
 app.set("view engine", "ejs");
 
+// Connect MongoDB
 try {
     mongoose.connect("mongodb://localhost:27017/blog");
     console.log("Connected to MongoDB!");
@@ -37,9 +37,6 @@ app.post("/posts/store", async (req, res) => {
     // const title = req.body.title;
     // const body = req.body.body;
     const { title, body } = req.body; // for short
-
-    console.log({title, body})
-
     try {
         const newPost = await addPost(title, body);
 
@@ -48,13 +45,17 @@ app.post("/posts/store", async (req, res) => {
             data: newPost,
         });
     } catch (error) {
-        console.log("er:", error)
+        console.log("er:", error);
         res.status(400).json({
             status: "error",
             // error: error,
             error, // for short
         });
     }
+});
+
+app.get("/", (req, res) => {
+    res.render("index");
 });
 
 app.get("/about", (req, res) => {
@@ -68,13 +69,9 @@ app.get("/post", (req, res) => {
     res.render("post");
 });
 
-app.get('/posts/store', (req, res) => {
-    res.render('create')
-    })
-app.get("/", (req, res) => {
-    res.render("index");
+app.get("/posts/store", (req, res) => {
+    res.render("create");
 });
-
 
 app.listen(5000, () => {
     console.log("Go to http://localhost:5000");
