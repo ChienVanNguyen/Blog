@@ -1,6 +1,8 @@
 const PostModel = require("../models/post.model");
 
 const addPost = async (title, body) => {
+    consle.log(title, body);
+    
     const post = await PostModel.create({
         title: title,
         body: body,

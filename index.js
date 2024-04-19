@@ -16,7 +16,7 @@ const app = express();
 app.set("view engine", "ejs");
 
 try {
-    mongoose.connect("mongodb://localhost:27017/cats");
+    mongoose.connect("mongodb://localhost:27017/blog");
     console.log("Connected to MongoDB!");
 } catch (error) {
     console.log("Cannot connect MongoDB", error);
@@ -28,7 +28,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 // Đăng ký thư mục public
 app.use(express.static("public"));
 
-app.get("/posts/store", async (req, res) => {
+app.get("/posts/new", async (req, res) => {
     // open create.ejs page
     res.render("create");
 });
@@ -38,6 +38,8 @@ app.post("/posts/store", async (req, res) => {
     // const body = req.body.body;
     const { title, body } = req.body; // for short
 
+    console.log({title, body})
+
     try {
         const newPost = await addPost(title, body);
 
@@ -46,6 +48,7 @@ app.post("/posts/store", async (req, res) => {
             data: newPost,
         });
     } catch (error) {
+        console.log("er:", error)
         res.status(400).json({
             status: "error",
             // error: error,
@@ -65,7 +68,7 @@ app.get("/post", (req, res) => {
     res.render("post");
 });
 
-app.get('/posts/new', (req, res) => {
+app.get('/posts/store', (req, res) => {
     res.render('create')
     })
 app.get("/", (req, res) => {
